@@ -6,9 +6,7 @@
 //
 
 import SwiftUI
-#if canImport(UIKit)
 import UIKit
-#endif
 
 struct InvoiceScannerView: View {
     @ObservedObject var invoiceViewModel: InvoiceViewModel

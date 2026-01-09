@@ -7,19 +7,13 @@
 
 import Foundation
 import SwiftData
-#if canImport(UIKit)
 import UIKit
-typealias PlatformImage = UIImage
-#elseif canImport(AppKit)
-import AppKit
-typealias PlatformImage = NSImage
-#endif
 
 @MainActor
 class InvoiceViewModel: ObservableObject {
     @Published var invoices: [Invoice] = []
     @Published var showingScanner = false
-    @Published var capturedImage: PlatformImage?
+    @Published var capturedImage: UIImage?
     @Published var showingInvoiceForm = false
     @Published var selectedProperty: Property?
     
@@ -58,7 +52,7 @@ class InvoiceViewModel: ObservableObject {
         invoices = (try? modelContext.fetch(descriptor)) ?? []
     }
     
-    func processCapturedImage(_ image: PlatformImage) {
+    func processCapturedImage(_ image: UIImage) {
         capturedImage = image
         isPlaceholderImage = false
         isProcessingOCR = true
