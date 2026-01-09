@@ -6,7 +6,13 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
+typealias PlatformImage = UIImage
+#elseif canImport(AppKit)
+import AppKit
+typealias PlatformImage = NSImage
+#endif
 import Vision
 import VisionKit
 
@@ -16,11 +22,21 @@ class OCRService {
     private init() {}
     
     /// Extract text from image using Vision framework
-    func extractText(from image: UIImage, completion: @escaping (String) -> Void) {
+    func extractText(from image: PlatformImage, completion: @escaping (String) -> Void) {
+        #if canImport(UIKit)
         guard let cgImage = image.cgImage else {
             completion("")
             return
         }
+        #elseif canImport(AppKit)
+        guard let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
+            completion("")
+            return
+        }
+        #else
+        completion("")
+        return
+        #endif
         
         let requestHandler = VNImageRequestHandler(cgImage: cgImage, options: [:])
         let request = VNRecognizeTextRequest { request, error in
